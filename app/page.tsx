@@ -1,28 +1,28 @@
-import { Suspense, use } from "react";
-
 import prisma from "./lib/db";
+import { Suspense, use } from "react";
 import { MapFilterItems } from "./components/MapFilterItems";
-import { SkeltonCard } from "./components/SkeletonCard";
+import { SkeletonCard } from "./components/SkeletonCard";
 import { NoItems } from "./components/NoItem";
 import { ListingCard } from "./components/ListingCard";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { unstable_noStore as noStore } from "next/cache";
 
-async function getData({
-  searchParams,
-  userId,
-}: {
-  userId: string | undefined;
-  searchParams?: {
-    filter?: string;
-    country?: string;
-    guest?: string;
-    room?: string;
-    bathroom?: string;
-  };
-}) {
-  noStore();
+// Define the types
+type SearchParams = {
+  filter?: string;
+  country?: string;
+  guest?: string;
+  room?: string;
+  bathroom?: string;
+};
 
+type GetDataParams = {
+  userId: string | undefined;
+  searchParams?: SearchParams;
+};
+
+async function getData({ searchParams, userId }: GetDataParams) {
+  noStore();
   const data = await prisma.home.findMany({
     where: {
       addedCategory: true,
@@ -51,22 +51,12 @@ async function getData({
   return data;
 }
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams?: {
-    filter?: string;
-    country?: string;
-    guest?: string;
-    room?: string;
-    bathroom?: string;
-  };
-}) {
+//Index page component
+export default function Home({ searchParams }: { searchParams?: SearchParams }) {
 
   return (
     <div className="container mx-auto mb-12 px-5 lg:px-10">
       <MapFilterItems />
-
       <Suspense key={searchParams?.filter} fallback={<SkeletonLoading />}>
         <ShowItems searchParams={searchParams} />
       </Suspense>
@@ -74,17 +64,9 @@ export default function Home({
   );
 }
 
-async function ShowItems({
-  searchParams,
-}: {
-  searchParams?: {
-    filter?: string;
-    country?: string;
-    guest?: string;
-    room?: string;
-    bathroom?: string;
-  };
-}) {
+
+//In-page components
+async function ShowItems({ searchParams }: { searchParams?: SearchParams }) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   const data = await getData({ searchParams: searchParams, userId: user?.id });
@@ -93,8 +75,8 @@ async function ShowItems({
     <>
       {data.length === 0 ? (
         <NoItems
-          description="Please check a other category or create your own listing!"
-          title="Sorry no listings found for this category..."
+          description="Please check another category or create your own listing!"
+          title="Sorry, no listings found for this category..."
         />
       ) : (
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
@@ -107,7 +89,7 @@ async function ShowItems({
               price={item.price as number}
               userId={user?.id}
               favoriteId={item.Favorite[0]?.id}
-              isInFavoriteList={item.Favorite.length > 0 ? true : false}
+              isInFavoriteList={item.Favorite.length > 0}
               homeId={item.id}
               pathName="/"
             />
@@ -121,15 +103,15 @@ async function ShowItems({
 function SkeletonLoading() {
   return (
     <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
-      <SkeltonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
     </div>
   );
 }
