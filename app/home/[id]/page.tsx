@@ -1,16 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 
+import prisma from "@/app/lib/db";
 import { createReservation } from "@/app/actions";
-import { CaegoryShowcase } from "@/app/components/CategoryShowcase";
+import { CategoryShowcase } from "@/app/components/CategoryShowcase";
 import { HomeMap } from "@/app/components/HomeMap";
 import { SelectCalender } from "@/app/components/SelectCalender";
 import { ReservationSubmitButton } from "@/app/components/SubmitButtons";
-import prisma from "@/app/lib/db";
 import { useCountries } from "@/app/lib/getCountries";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-
 import Image from "next/image";
 import Link from "next/link";
 import { unstable_noStore as noStore } from "next/cache";
@@ -36,7 +35,6 @@ async function getData(homeid: string) {
           homeId: homeid,
         },
       },
-
       User: {
         select: {
           profileImage: true,
@@ -49,16 +47,13 @@ async function getData(homeid: string) {
   return data;
 }
 
-export default async function HomeRoute({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function HomeRoute({ params }: { params: { id: string } }) {
   const data = await getData(params.id);
   const { getCountryByValue } = useCountries();
   const country = getCountryByValue(data?.country as string);
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+
   return (
     <div className="w-[75%] mx-auto mt-10 mb-12">
       <h1 className="font-medium text-2xl mb-5">{data?.title}</h1>
@@ -97,13 +92,9 @@ export default async function HomeRoute({
           </div>
 
           <Separator className="my-7" />
-
-          <CaegoryShowcase categoryName={data?.categoryName as string} />
-
+          <CategoryShowcase categoryName={data?.categoryName as string} />
           <Separator className="my-7" />
-
           <p className="text-muted-foreground">{data?.description}</p>
-
           <Separator className="my-7" />
 
           <HomeMap locationValue={country?.value as string} />
@@ -112,12 +103,9 @@ export default async function HomeRoute({
         <form action={createReservation}>
           <input type="hidden" name="homeId" value={params.id} />
           <input type="hidden" name="userId" value={user?.id} />
-
           <SelectCalender reservation={data?.Reservation} />
 
-          {user?.id ? (
-            <ReservationSubmitButton />
-          ) : (
+          {user?.id ? <ReservationSubmitButton /> : (
             <Button className="w-full" asChild>
               <Link href="/api/auth/login">Make a Reservation</Link>
             </Button>

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCountries } from "../lib/getCountries";
 import { AddToFavoriteButton, DeleteFromFavoriteButton } from "./SubmitButtons";
-import { DeleteFromFavorite, addToFavorite } from "../actions";
+import { deleteFromFavorite, addToFavorite } from "../actions";
 
 interface iAppProps {
   imagePath: string;
@@ -43,7 +43,7 @@ export function ListingCard({
         {userId && (
           <div className="z-10 absolute top-2 right-2">
             {isInFavoriteList ? (
-              <form action={DeleteFromFavorite}>
+              <form action={deleteFromFavorite}>
                 <input type="hidden" name="favoriteId" value={favoriteId} />
                 <input type="hidden" name="userId" value={userId} />
                 <input type="hidden" name="pathName" value={pathName} />

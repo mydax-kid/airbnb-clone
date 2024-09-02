@@ -1,7 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import prisma from "./lib/db";
+import { redirect } from "next/navigation";
 import { supabase } from "./lib/supabase";
 import { revalidatePath } from "next/cache";
 import path from "path";
@@ -137,7 +137,7 @@ export async function addToFavorite(formData: FormData) {
   revalidatePath(pathName);
 }
 
-export async function DeleteFromFavorite(formData: FormData) {
+export async function deleteFromFavorite(formData: FormData) {
   const favoriteId = formData.get("favoriteId") as string;
   const pathName = formData.get("pathName") as string;
   const userId = formData.get("userId") as string;
@@ -161,9 +161,9 @@ export async function createReservation(formData: FormData) {
   const data = await prisma.reservation.create({
     data: {
       userId: userId,
+      homeId: homeId,
       endDate: endDate,
       startDate: startDate,
-      homeId: homeId,
     },
   });
 

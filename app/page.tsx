@@ -39,7 +39,7 @@ async function getData({ searchParams, userId }: GetDataParams) {
       id: true,
       price: true,
       description: true,
-      country: true,
+      country: true, 
       Favorite: {
         where: {
           userId: userId ?? undefined,
@@ -53,7 +53,6 @@ async function getData({ searchParams, userId }: GetDataParams) {
 
 //Index page component
 export default function Home({ searchParams }: { searchParams?: SearchParams }) {
-
   return (
     <div className="container mx-auto mb-12 px-5 lg:px-10">
       <MapFilterItems />

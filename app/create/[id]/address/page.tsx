@@ -1,8 +1,11 @@
 "use client";
 
 import { createLocation } from "@/app/actions";
-import { CreatioBottomBar } from "@/app/components/CreationBottomBar";
+import { CreationBottomBar } from "@/app/components/CreationBottomBar";
 import { useCountries } from "@/app/lib/getCountries";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Select,
   SelectContent,
@@ -12,11 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import dynamic from "next/dynamic";
-import { useState } from "react";
 
-export default function AddressRoutw({ params }: { params: { id: string } }) {
+export default function AddressRoute({ params }: { params: { id: string } }) {
   const { getAllCountries } = useCountries();
   const [locationValue, setLocationValue] = useState("");
 
@@ -24,6 +24,7 @@ export default function AddressRoutw({ params }: { params: { id: string } }) {
     ssr: false,
     loading: () => <Skeleton className="h-[50vh] w-full" />,
   });
+
   return (
     <>
       <div className="w-3/5 mx-auto">
@@ -57,7 +58,7 @@ export default function AddressRoutw({ params }: { params: { id: string } }) {
           <LazyMap locationValue={locationValue} />
         </div>
 
-        <CreatioBottomBar />
+        <CreationBottomBar />
       </form>
     </>
   );
