@@ -1,4 +1,4 @@
-import { SkeltonCard } from "../components/SkeletonCard";
+import { SkeletonCard } from "../components/SkeletonCard";
 
 export default function Favoritesloading() {
   return (
@@ -8,20 +8,20 @@ export default function Favoritesloading() {
       </h2>
 
       <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-8 mt-8">
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
-        <SkeltonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
       </div>
     </section>
   );
